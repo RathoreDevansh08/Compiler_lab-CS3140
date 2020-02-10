@@ -1,0 +1,910 @@
+
+state 0:
+
+	S : . PROGRAM 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	S	goto 58
+	PROGRAM	goto 2
+	EXP	goto 1
+
+	.	reduce by rule 2
+
+
+state 1:
+
+	PROGRAM : EXP . SEMICOLON PROGRAM 
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	SEMICOLON	shift 10
+
+
+	.	error
+
+
+state 2:
+
+	S : PROGRAM .  (reduce by rule 0)
+
+
+
+	.	reduce by rule 0
+
+
+state 3:
+
+	EXP : BREAK .  (reduce by rule 16)
+
+
+
+	.	reduce by rule 16
+
+
+state 4:
+
+	EXP : FOR . ID ASSIGN EXP TO EXP DO EXP 
+
+	ID	shift 16
+
+
+	.	error
+
+
+state 5:
+
+	EXP : WHILE . EXP DO EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 17
+
+	.	error
+
+
+state 6:
+
+	EXP : IF . EXP THEN EXP 
+	EXP : IF . EXP THEN EXP ELSE EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 18
+
+	.	error
+
+
+state 7:
+
+	EXP : LET . DECS IN EXPS END 
+
+	VAR	shift 22
+
+	DEC	goto 21
+	DECS	goto 20
+	VARDECL	goto 19
+
+	.	reduce by rule 23
+
+
+state 8:
+
+	EXP : ID .  (reduce by rule 4)
+	EXP : ID . LPAREN EXPCOMM RPAREN 
+
+	LPAREN	shift 23
+
+
+	.	reduce by rule 4
+
+
+state 9:
+
+	EXP : INT .  (reduce by rule 3)
+
+
+
+	.	reduce by rule 3
+
+
+state 10:
+
+	PROGRAM : EXP SEMICOLON . PROGRAM 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	PROGRAM	goto 24
+	EXP	goto 1
+
+	.	reduce by rule 2
+
+
+state 11:
+
+	EXP : EXP EQUALS . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 25
+
+	.	error
+
+
+state 12:
+
+	EXP : EXP DIVIDE . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 26
+
+	.	error
+
+
+state 13:
+
+	EXP : EXP MULTIPLY . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 27
+
+	.	error
+
+
+state 14:
+
+	EXP : EXP MINUS . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 28
+
+	.	error
+
+
+state 15:
+
+	EXP : EXP PLUS . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 29
+
+	.	error
+
+
+state 16:
+
+	EXP : FOR ID . ASSIGN EXP TO EXP DO EXP 
+
+	ASSIGN	shift 30
+
+
+	.	error
+
+
+state 17:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : WHILE EXP . DO EXP 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	DO	shift 31
+
+
+	.	error
+
+
+state 18:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : IF EXP . THEN EXP 
+	EXP : IF EXP . THEN EXP ELSE EXP 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	THEN	shift 32
+
+
+	.	error
+
+
+state 19:
+
+	DEC : VARDECL .  (reduce by rule 26)
+
+
+
+	.	reduce by rule 26
+
+
+state 20:
+
+	EXP : LET DECS . IN EXPS END 
+
+	IN	shift 33
+
+
+	.	error
+
+
+state 21:
+
+	DECS : DEC .  (reduce by rule 24)
+	DECS : DEC . SEMICOLON DECS 
+
+	SEMICOLON	shift 34
+
+
+	.	reduce by rule 24
+
+
+state 22:
+
+	VARDECL : VAR . ID ASSIGN EXP 
+
+	ID	shift 35
+
+
+	.	error
+
+
+state 23:
+
+	EXP : ID LPAREN . EXPCOMM RPAREN 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 37
+	EXPCOMM	goto 36
+
+	.	reduce by rule 17
+
+
+state 24:
+
+	PROGRAM : EXP SEMICOLON PROGRAM .  (reduce by rule 1)
+
+
+
+	.	reduce by rule 1
+
+
+state 25:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : EXP EQUALS EXP .  (reduce by rule 9)
+
+<<<<<<< HEAD
+	PLUS	shift 12
+	MINUS	shift 11
+	MULTIPLY	shift 10
+	DIVIDE	shift 9
+=======
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+>>>>>>> master
+	IN	reduce by rule 9
+	END	reduce by rule 9
+	COMMA	reduce by rule 9
+	SEMICOLON	reduce by rule 9
+	RPAREN	reduce by rule 9
+	THEN	reduce by rule 9
+	ELSE	reduce by rule 9
+<<<<<<< HEAD
+=======
+	TO	reduce by rule 9
+	DO	reduce by rule 9
+>>>>>>> master
+
+
+	.	error
+
+
+state 26:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP DIVIDE EXP .  (reduce by rule 8)
+	EXP : EXP . EQUALS EXP 
+
+
+
+	.	reduce by rule 8
+
+
+state 27:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP MULTIPLY EXP .  (reduce by rule 7)
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+
+
+
+	.	reduce by rule 7
+
+
+state 28:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP MINUS EXP .  (reduce by rule 6)
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+
+
+	.	reduce by rule 6
+
+
+state 29:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP PLUS EXP .  (reduce by rule 5)
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+
+
+	.	reduce by rule 5
+
+
+state 30:
+
+	EXP : FOR ID ASSIGN . EXP TO EXP DO EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 38
+
+	.	error
+
+
+state 31:
+
+	EXP : WHILE EXP DO . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 39
+
+	.	error
+
+
+state 32:
+
+	EXP : IF EXP THEN . EXP 
+	EXP : IF EXP THEN . EXP ELSE EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 40
+
+	.	error
+
+
+state 33:
+
+	EXP : LET DECS IN . EXPS END 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 42
+	EXPS	goto 41
+
+	.	reduce by rule 20
+
+
+state 34:
+
+	DECS : DEC SEMICOLON . DECS 
+
+	VAR	shift 22
+
+	DEC	goto 21
+	DECS	goto 43
+	VARDECL	goto 19
+
+	.	reduce by rule 23
+
+
+state 35:
+
+	VARDECL : VAR ID . ASSIGN EXP 
+
+	ASSIGN	shift 44
+
+
+	.	error
+
+
+state 36:
+
+	EXP : ID LPAREN EXPCOMM . RPAREN 
+
+	RPAREN	shift 45
+
+
+	.	error
+
+
+state 37:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXPCOMM : EXP .  (reduce by rule 18)
+	EXPCOMM : EXP . COMMA EXPCOMM 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	COMMA	shift 46
+
+
+	.	reduce by rule 18
+
+
+state 38:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : FOR ID ASSIGN EXP . TO EXP DO EXP 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	TO	shift 47
+
+
+	.	error
+
+
+state 39:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : WHILE EXP DO EXP .  (reduce by rule 15)
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+
+
+	.	reduce by rule 15
+
+
+state 40:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : IF EXP THEN EXP .  (reduce by rule 12)
+	EXP : IF EXP THEN EXP . ELSE EXP 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	ELSE	shift 48
+
+
+	.	reduce by rule 12
+
+
+state 41:
+
+	EXP : LET DECS IN EXPS . END 
+
+	END	shift 49
+
+
+	.	error
+
+
+state 42:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXPS : EXP .  (reduce by rule 21)
+	EXPS : EXP . SEMICOLON EXPS 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	SEMICOLON	shift 50
+
+
+	.	reduce by rule 21
+
+
+state 43:
+
+	DECS : DEC SEMICOLON DECS .  (reduce by rule 25)
+
+
+
+	.	reduce by rule 25
+
+
+state 44:
+
+	VARDECL : VAR ID ASSIGN . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 51
+
+	.	error
+
+
+state 45:
+
+	EXP : ID LPAREN EXPCOMM RPAREN .  (reduce by rule 11)
+
+
+
+	.	reduce by rule 11
+
+
+state 46:
+
+	EXPCOMM : EXP COMMA . EXPCOMM 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 37
+	EXPCOMM	goto 52
+
+	.	reduce by rule 17
+
+
+state 47:
+
+	EXP : FOR ID ASSIGN EXP TO . EXP DO EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 53
+
+	.	error
+
+
+state 48:
+
+	EXP : IF EXP THEN EXP ELSE . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 54
+
+	.	error
+
+
+state 49:
+
+	EXP : LET DECS IN EXPS END .  (reduce by rule 10)
+
+
+
+	.	reduce by rule 10
+
+
+state 50:
+
+	EXPS : EXP SEMICOLON . EXPS 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 42
+	EXPS	goto 55
+
+	.	reduce by rule 20
+
+
+state 51:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	VARDECL : VAR ID ASSIGN EXP .  (reduce by rule 27)
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+
+
+	.	reduce by rule 27
+
+
+state 52:
+
+	EXPCOMM : EXP COMMA EXPCOMM .  (reduce by rule 19)
+
+
+
+	.	reduce by rule 19
+
+
+state 53:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : FOR ID ASSIGN EXP TO EXP . DO EXP 
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+	DO	shift 56
+
+
+	.	error
+
+
+state 54:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : IF EXP THEN EXP ELSE EXP .  (reduce by rule 13)
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+
+
+	.	reduce by rule 13
+
+
+state 55:
+
+	EXPS : EXP SEMICOLON EXPS .  (reduce by rule 22)
+
+
+
+	.	reduce by rule 22
+
+
+state 56:
+
+	EXP : FOR ID ASSIGN EXP TO EXP DO . EXP 
+
+	INT	shift 9
+	ID	shift 8
+	LET	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 57
+
+	.	error
+
+
+state 57:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : FOR ID ASSIGN EXP TO EXP DO EXP .  (reduce by rule 14)
+
+	PLUS	shift 15
+	MINUS	shift 14
+	MULTIPLY	shift 13
+	DIVIDE	shift 12
+	EQUALS	shift 11
+
+
+	.	reduce by rule 14
+
+
+state 58:
+
+
+	EOF	accept
+
+
+	.	error
+
+<<<<<<< HEAD
+80 of 171 action table entries left after compaction
+28 goto table entries
+=======
+124 of 296 action table entries left after compaction
+33 goto table entries
+>>>>>>> master

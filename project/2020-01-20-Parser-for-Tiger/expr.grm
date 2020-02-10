@@ -1,0 +1,92 @@
+%%
+
+%verbose
+%pure
+
+%term EOF
+	| INT of int | ID of string
+	| PLUS | MINUS | MULTIPLY | DIVIDE
+	| AND | OR
+	| EQUALS | ASSIGN | NOTEQUAL | LESSTHAN | LESSTHANEQUAL | GRETHAN | GRETHANEQUAL
+	| LET | IN | END | VAR 
+	| FUNCTION
+	| COLON | COMMA | SEMICOLON
+	| LPAREN | RPAREN | LSQBR | RSQBR | LCUBR | RCUBR
+	| IF | THEN | ELSE 
+	| WHILE | FOR | TO | BREAK
+	| TYPE | ARRAY | DO | OF
+	| NIL | INTK | STRINGK | DOT
+	| DOUBQUOTES | BACKSLASH
+
+
+%nonterm S			of Ast.Expr list
+	   | PROGRAM  	of Ast.Expr list
+       | EXP     	of Ast.Expr
+	   | EXPS 		of Ast.Expr list
+	   | DEC 		of Ast.decl
+	   | DECS 		of Ast.decl list
+	   | VARDECL	of Ast.decl
+	   | EXPCOMM 	of Ast.Expr list
+	
+%pos int
+%eop EOF
+%noshift EOF
+
+%nonassoc ASSIGN
+%nonassoc ID
+%nonassoc WHILE DO
+%right THEN
+%right ELSE
+%nonassoc LPAREN RPAREN OF
+%left OR
+%left AND
+%nonassoc EQUALS NOTEQUAL LESSTHAN LESSTHANEQUAL GRETHAN GRETHANEQUAL
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
+
+%name Tiger
+
+%%
+
+S	: 	PROGRAM					(PROGRAM)
+
+PROGRAM	:	EXP SEMICOLON PROGRAM	 ( EXP::PROGRAM )
+		|	(* empty *)				 ( [] )
+
+EXP     :   INT                      ( Ast.INT(INT) )
+		| 	ID 						 ( Ast.ID(ID) )
+        |   EXP PLUS EXP             ( Ast.BINOP(EXP1, Ast.Plus, EXP2) )
+		|	EXP MINUS EXP			 ( Ast.BINOP(EXP1, Ast.Minus, EXP2) )
+		|	EXP MULTIPLY EXP		 ( Ast.BINOP(EXP1, Ast.Mul, EXP2) )
+		|	EXP DIVIDE EXP			 ( Ast.BINOP(EXP1, Ast.Div, EXP2) )
+		| 	EXP EQUALS EXP 			 ( Ast.BINOP(EXP1, Ast.Equals, EXP2) )
+		| 	LET DECS IN EXPS END	 ( Ast.LET(DECS, EXPS) )
+		| 	ID LPAREN EXPCOMM RPAREN ( Ast.FUNC(ID, EXPCOMM) )
+		| 	IF EXP THEN EXP 		 ( Ast.IF(EXP1, EXP2) )
+		| 	IF EXP THEN EXP ELSE EXP ( Ast.IFELSE(EXP1, EXP2, EXP3) )
+		|	FOR ID ASSIGN EXP TO EXP DO EXP ( Ast.FOR(ID, EXP1, EXP2, EXP3) )
+		|	WHILE EXP DO EXP  ( Ast.WHILE(EXP1, EXP2) )
+		|	BREAK			( Ast.BREAK )
+
+EXPCOMM :  	(* empty *)				 ( [] )
+		| 	EXP 					 ( EXP::[] )
+		|     EXP COMMA EXPCOMM 		 ( EXP::EXPCOMM )
+		
+		
+
+EXPS 	: 	(* empty *)				 ( [] )
+ 		| 	EXP 					 ( EXP::[] )
+		|	EXP SEMICOLON EXPS		 ( EXP::EXPS )
+		
+		
+
+DECS 	:  	(* empty *) 			 ( [] )
+		| 	DEC						 ( DEC::[] )
+		|	DEC SEMICOLON DECS		 ( DEC::DECS )
+		
+		
+DEC  	: 	VARDECL					 ( VARDECL )
+		
+VARDECL : 	VAR ID ASSIGN EXP 		 ( Ast.VARDECL(ID, EXP) )
+
+	  

@@ -1,0 +1,27 @@
+/*
+Name: Devansh Singh Rathore
+RollNo.: 111701011
+/*
+	IITPKD
+*/
+*/
+
+if 4 + 2 then 3 - 1;
+
+let
+  var abc := 4;
+  var de := 35;
+in
+  if abc = 1 then de = de + 1 else de = de - 1;        /* result */
+  break;
+end;
+
+if 3 then 5;
+
+
+for i := 0 to 1 do
+     abc = abc + 1;
+     
+while 3 do 4;
+
+break;
