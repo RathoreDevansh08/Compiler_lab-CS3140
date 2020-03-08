@@ -19,20 +19,21 @@
 	| DOUBQUOTES | BACKSLASH
 
 
-%nonterm S			of Ast.Expr list
-	   | PROGRAM  	of Ast.Expr list
+%nonterm S			of Ast.Prog
+	   | PROGRAM  	of Ast.Prog
        | EXP     	of Ast.Expr
 	   | EXPS 		of Ast.Expr list
+	   | LVALUE     of Ast.Lvalue
 	   | DEC 		of Ast.decl
 	   | DECS 		of Ast.decl list
 	   | VARDECL	of Ast.decl
 	   | EXPCOMM 	of Ast.Expr list
+	   | TY         of Ast.Ty
 	
 %pos int
 %eop EOF
 %noshift EOF
 
-%nonassoc ASSIGN
 %nonassoc ID
 %nonassoc WHILE DO
 %right THEN
@@ -40,9 +41,11 @@
 %nonassoc LPAREN RPAREN OF
 %left OR
 %left AND
+
 %nonassoc EQUALS NOTEQUAL LESSTHAN LESSTHANEQUAL GRETHAN GRETHANEQUAL
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
+%left ASSIGN
 
 %name Tiger
 
@@ -50,8 +53,8 @@
 
 S	: 	PROGRAM					(PROGRAM)
 
-PROGRAM	:	EXP SEMICOLON PROGRAM	 ( EXP::PROGRAM )
-		|	(* empty *)				 ( [] )
+PROGRAM	:	EXP	 ( Ast.PE(EXP) )
+		|	DECS	( Ast.PD(DECS) )
 
 EXP     :   INT                      ( Ast.INT(INT) )
 		| 	ID 						 ( Ast.ID(ID) )
@@ -60,12 +63,21 @@ EXP     :   INT                      ( Ast.INT(INT) )
 		|	EXP MULTIPLY EXP		 ( Ast.BINOP(EXP1, Ast.Mul, EXP2) )
 		|	EXP DIVIDE EXP			 ( Ast.BINOP(EXP1, Ast.Div, EXP2) )
 		| 	EXP EQUALS EXP 			 ( Ast.BINOP(EXP1, Ast.Equals, EXP2) )
+		| 	EXP NOTEQUAL EXP 		 ( Ast.BINOP(EXP1, Ast.NotEqual, EXP2) )
+		|	EXP LESSTHAN EXP		 ( Ast.BINOP(EXP1, Ast.LessThan, EXP2) )
+		|	EXP LESSTHANEQUAL EXP	 ( Ast.BINOP(EXP1, Ast.LessThanEqual, EXP2) )
+		|	EXP GRETHAN EXP			 ( Ast.BINOP(EXP1, Ast.GreThan, EXP2) )
+		|	EXP GRETHANEQUAL EXP	 ( Ast.BINOP(EXP1, Ast.GreThanEqual, EXP2) )
+		|	LPAREN EXP RPAREN        ( EXP ) 
+		|	LVALUE					 ( Ast.LVE(LVALUE) )
+		|   LVALUE ASSIGN EXP        ( Ast.ASSIGN(LVALUE, EXP) )
 		| 	LET DECS IN EXPS END	 ( Ast.LET(DECS, EXPS) )
 		| 	ID LPAREN EXPCOMM RPAREN ( Ast.FUNC(ID, EXPCOMM) )
 		| 	IF EXP THEN EXP 		 ( Ast.IF(EXP1, EXP2) )
 		| 	IF EXP THEN EXP ELSE EXP ( Ast.IFELSE(EXP1, EXP2, EXP3) )
 		|	FOR ID ASSIGN EXP TO EXP DO EXP ( Ast.FOR(ID, EXP1, EXP2, EXP3) )
 		|	WHILE EXP DO EXP  ( Ast.WHILE(EXP1, EXP2) )
+		
 		|	BREAK			( Ast.BREAK )
 
 EXPCOMM :  	(* empty *)				 ( [] )
@@ -86,7 +98,12 @@ DECS 	:  	(* empty *) 			 ( [] )
 		
 		
 DEC  	: 	VARDECL					 ( VARDECL )
+
+TY		:	ID						(Ast.TYPEID(ID))
 		
 VARDECL : 	VAR ID ASSIGN EXP 		 ( Ast.VARDECL(ID, EXP) )
 
-	  
+LVALUE:     ID						(Ast.LVAL_IDEN(ID))
+		|	LVALUE DOT ID			(Ast.FIELD (LVALUE,ID))
+		|	LVALUE LPAREN EXP RPAREN	(Ast.ELEMENT (LVALUE,EXP))	  
+		

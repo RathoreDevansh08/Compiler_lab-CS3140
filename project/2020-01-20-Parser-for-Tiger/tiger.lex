@@ -24,7 +24,7 @@ val nested_commenting = ref 0;
 %header (functor TigerLexFun (structure Tokens : Tiger_TOKENS));
 %s COMMENT;
 ws    = [\ \t];
-digit = [0-9]+;
+digit = [0-9];
 letter = [a-zA-Z];
 eol = ("\n\r" | "\r\n" | "\r" | "\n");
 esc = [\a \b \f \r \t \v];
@@ -44,7 +44,7 @@ esc = [\a \b \f \r \t \v];
 <COMMENT> . | [\n]       => ( continue() );
 
 <INITIAL> {eol} =>            ( continue() );
-<INITIAL> {esc}	  => ( continue() );
+
 <INITIAL> {ws}+         => ( continue() );
 
 <INITIAL> {digit}+      => ( Tokens.INT(IntFromString yytext, yypos, yypos + size yytext) );
@@ -94,7 +94,9 @@ esc = [\a \b \f \r \t \v];
 <INITIAL> "{"		  => ( Tokens.LCUBR(yypos, yypos + 1) );
 <INITIAL> "}"		  => ( Tokens.RCUBR(yypos, yypos + 1) );
 
-<INITIAL> [a-zA-Z][a-zA-Z0-9_]* => ( Tokens.ID(yytext, yypos, yypos + size yytext) );
+<INITIAL> ({letter}({letter}|{digit}|"_")*) | ("_main") => (Tokens.ID(yytext, yypos, yypos + size yytext));
+
+<INITIAL> {esc}       => ( continue() );
 
 <INITIAL> "\""		  => ( Tokens.DOUBQUOTES(yypos, yypos + 1) );
 <INITIAL> "\\"		  => ( Tokens.BACKSLASH(yypos, yypos + 1) );

@@ -15,8 +15,14 @@ val yellow = "\027[0;33m";      (* keywords *)
 fun get_tabs n = if n = 0 then "" else "    " ^ get_tabs (n-1)
 fun new_line n = ("\n" ^ get_tabs(n))
 
-fun print_expr (Ast.INT x) = print (Int.toString (x))
+fun print_prog (Ast.PE x) = (print_expr x )
+|   print_prog (Ast.PD x) = (print_decs x)
+
+and
+
+    print_expr (Ast.INT x) = print (Int.toString (x))
 |   print_expr (Ast.ID x) = print (x)
+|	print_expr (Ast.LVE (x)) = print_lval x 
 |   print_expr (Ast.BINOP (x , bop , y)) = ( print_expr x ;
         								     print (" " ^ (Ast.binOpToString bop) ^ " ") ;
         								     print_expr y )
@@ -82,7 +88,10 @@ fun print_expr (Ast.INT x) = print (Int.toString (x))
 						  indent := !indent - 1;
 						  print (new_line(!indent))
 						  )
-|	print_expr (Ast.BREAK) = (print("break"))						  
+|	print_expr (Ast.BREAK) = (print("break"))
+|	print_expr (Ast.ASSIGN(a,b)) = ( print_lval a ;
+       							     print (" := ") ;
+    								 print_expr (b) )						  
 
 and
 
@@ -112,7 +121,19 @@ and
 	print_dec (Ast.VARDECL(x, y)) = ( print ("var " ^ x ^ " := ");
 		 							  print_expr(y) )
 
-fun compile []        = ()
-  | compile (x :: xs) = (print_expr x ; print (";" ^ new_line (!indent)) ; compile xs)
+and
+
+	print_lval (Ast.LVAL_IDEN x) = print(x)
+|   print_lval (Ast.FIELD (lval , id)) =
+        ( print_lval lval ; print "." ; print id )
+|   print_lval (Ast.ELEMENT (lval, x)) =
+        ( print_lval lval ; print "[" ; print_expr x ; print "]")
+
+and
+
+	print_ty (Ast.TYPEID id) = print(id) 	
+	
+	
+fun compile x = (print_prog x )
 
 end
