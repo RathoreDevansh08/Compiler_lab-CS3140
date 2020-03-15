@@ -34,6 +34,7 @@
 %eop EOF
 %noshift EOF
 
+
 %nonassoc ID
 %nonassoc WHILE DO
 %right THEN
@@ -43,9 +44,10 @@
 %left AND
 
 %nonassoc EQUALS NOTEQUAL LESSTHAN LESSTHANEQUAL GRETHAN GRETHANEQUAL
+%left ASSIGN
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
-%left ASSIGN
+
 
 %name Tiger
 
@@ -58,6 +60,7 @@ PROGRAM	:	EXP	 ( Ast.PE(EXP) )
 
 EXP     :   INT                      ( Ast.INT(INT) )
 		| 	ID 						 ( Ast.ID(ID) )
+		| 	LVALUE					 ( Ast.LVE(LVALUE) )
         |   EXP PLUS EXP             ( Ast.BINOP(EXP1, Ast.Plus, EXP2) )
 		|	EXP MINUS EXP			 ( Ast.BINOP(EXP1, Ast.Minus, EXP2) )
 		|	EXP MULTIPLY EXP		 ( Ast.BINOP(EXP1, Ast.Mul, EXP2) )
@@ -69,15 +72,14 @@ EXP     :   INT                      ( Ast.INT(INT) )
 		|	EXP GRETHAN EXP			 ( Ast.BINOP(EXP1, Ast.GreThan, EXP2) )
 		|	EXP GRETHANEQUAL EXP	 ( Ast.BINOP(EXP1, Ast.GreThanEqual, EXP2) )
 		|	LPAREN EXP RPAREN        ( EXP ) 
-		|	LVALUE					 ( Ast.LVE(LVALUE) )
 		|   LVALUE ASSIGN EXP        ( Ast.ASSIGN(LVALUE, EXP) )
+		|	LVALUE LPAREN EXP RPAREN ( Ast.FUNCALL(LVALUE, EXP) )
 		| 	LET DECS IN EXPS END	 ( Ast.LET(DECS, EXPS) )
 		| 	ID LPAREN EXPCOMM RPAREN ( Ast.FUNC(ID, EXPCOMM) )
 		| 	IF EXP THEN EXP 		 ( Ast.IF(EXP1, EXP2) )
 		| 	IF EXP THEN EXP ELSE EXP ( Ast.IFELSE(EXP1, EXP2, EXP3) )
 		|	FOR ID ASSIGN EXP TO EXP DO EXP ( Ast.FOR(ID, EXP1, EXP2, EXP3) )
-		|	WHILE EXP DO EXP  ( Ast.WHILE(EXP1, EXP2) )
-		
+		|	WHILE EXP DO EXP  ( Ast.WHILE(EXP1, EXP2) )		
 		|	BREAK			( Ast.BREAK )
 
 EXPCOMM :  	(* empty *)				 ( [] )
@@ -94,7 +96,7 @@ EXPS 	: 	(* empty *)				 ( [] )
 
 DECS 	:  	(* empty *) 			 ( [] )
 		| 	DEC						 ( DEC::[] )
-		|	DEC SEMICOLON DECS		 ( DEC::DECS )
+		|	DEC DECS		 ( DEC::DECS )
 		
 		
 DEC  	: 	VARDECL					 ( VARDECL )
@@ -105,5 +107,5 @@ VARDECL : 	VAR ID ASSIGN EXP 		 ( Ast.VARDECL(ID, EXP) )
 
 LVALUE:     ID						(Ast.LVAL_IDEN(ID))
 		|	LVALUE DOT ID			(Ast.FIELD (LVALUE,ID))
-		|	LVALUE LPAREN EXP RPAREN	(Ast.ELEMENT (LVALUE,EXP))	  
+		|	LVALUE LSQBR EXP RSQBR	(Ast.ELEMENT (LVALUE,EXP))	  
 		

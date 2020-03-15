@@ -1,27 +1,32 @@
-20 reduce/reduce conflicts
-1 rule not reduced
+24 reduce/reduce conflicts
+2 rules not reduced
 
+warning: rule <DECS : DEC > will never be reduced
 warning: rule <TY : ID > will never be reduced
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on DO
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on TO
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on ELSE
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on THEN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on RPAREN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on SEMICOLON
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on COMMA
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on END
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on IN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on GRETHANEQUAL
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on GRETHAN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on LESSTHANEQUAL
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on LESSTHAN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on NOTEQUAL
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on EQUALS
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on DIVIDE
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on MULTIPLY
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on MINUS
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on PLUS
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on EOF
+error:  state 3: reduce/reduce conflict between rule 33 and rule 32 on IN
+error:  state 3: reduce/reduce conflict between rule 33 and rule 32 on EOF
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on DO
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on TO
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on ELSE
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on THEN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on RSQBR
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on RPAREN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on SEMICOLON
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on COMMA
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on VAR
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on END
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on IN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on GRETHANEQUAL
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on GRETHAN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on LESSTHANEQUAL
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on LESSTHAN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on NOTEQUAL
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on EQUALS
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on DIVIDE
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on MULTIPLY
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on MINUS
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on PLUS
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on EOF
 
 state 0:
 
@@ -37,7 +42,7 @@ state 0:
 	FOR	shift 8
 	BREAK	shift 7
 
-	S	goto 78
+	S	goto 80
 	PROGRAM	goto 6
 	EXP	goto 5
 	LVALUE	goto 4
@@ -45,16 +50,16 @@ state 0:
 	DECS	goto 2
 	VARDECL	goto 1
 
-	.	reduce by rule 31
+	.	reduce by rule 32
 
 
 state 1:
 
-	DEC : VARDECL .  (reduce by rule 34)
+	DEC : VARDECL .  (reduce by rule 35)
 
 
 
-	.	reduce by rule 34
+	.	reduce by rule 35
 
 
 state 2:
@@ -65,31 +70,40 @@ state 2:
 
 	.	reduce by rule 2
 
+error:  state 3: reduce/reduce conflict between rule 33 and rule 32 on IN
+error:  state 3: reduce/reduce conflict between rule 33 and rule 32 on EOF
 
 state 3:
 
-	DECS : DEC .  (reduce by rule 32)
-	DECS : DEC . SEMICOLON DECS 
+	DECS : DEC .  (reduce by rule 33)
+	DECS : DEC . DECS 
 
-	SEMICOLON	shift 16
+	EOF	reduce by rule 32
+	IN	reduce by rule 32
+	VAR	shift 12
 
+	DEC	goto 3
+	DECS	goto 16
+	VARDECL	goto 1
 
-	.	reduce by rule 32
+	.	error
 
 
 state 4:
 
-	EXP : LVALUE .  (reduce by rule 16)
+	EXP : LVALUE .  (reduce by rule 5)
 	EXP : LVALUE . ASSIGN EXP 
+	EXP : LVALUE . LPAREN EXP RPAREN 
 	LVALUE : LVALUE . DOT ID 
-	LVALUE : LVALUE . LPAREN EXP RPAREN 
+	LVALUE : LVALUE . LSQBR EXP RSQBR 
 
-	ASSIGN	shift 19
-	LPAREN	shift 18
+	ASSIGN	shift 20
+	LPAREN	shift 19
+	LSQBR	shift 18
 	DOT	shift 17
 
 
-	.	reduce by rule 16
+	.	reduce by rule 5
 
 
 state 5:
@@ -106,16 +120,16 @@ state 5:
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
 
 
 	.	reduce by rule 1
@@ -132,18 +146,18 @@ state 6:
 
 state 7:
 
-	EXP : BREAK .  (reduce by rule 24)
+	EXP : BREAK .  (reduce by rule 25)
 
 
 
-	.	reduce by rule 24
+	.	reduce by rule 25
 
 
 state 8:
 
 	EXP : FOR . ID ASSIGN EXP TO EXP DO EXP 
 
-	ID	shift 30
+	ID	shift 31
 
 
 	.	error
@@ -162,7 +176,7 @@ state 9:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 31
+	EXP	goto 32
 	LVALUE	goto 4
 
 	.	error
@@ -182,7 +196,7 @@ state 10:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 32
+	EXP	goto 33
 	LVALUE	goto 4
 
 	.	error
@@ -201,7 +215,7 @@ state 11:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 33
+	EXP	goto 34
 	LVALUE	goto 4
 
 	.	error
@@ -211,7 +225,7 @@ state 12:
 
 	VARDECL : VAR . ID ASSIGN EXP 
 
-	ID	shift 34
+	ID	shift 35
 
 
 	.	error
@@ -224,37 +238,39 @@ state 13:
 	VAR	shift 12
 
 	DEC	goto 3
-	DECS	goto 35
+	DECS	goto 36
 	VARDECL	goto 1
 
-	.	reduce by rule 31
+	.	reduce by rule 32
 
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on DO
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on TO
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on ELSE
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on THEN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on RPAREN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on SEMICOLON
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on COMMA
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on END
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on IN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on GRETHANEQUAL
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on GRETHAN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on LESSTHANEQUAL
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on LESSTHAN
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on NOTEQUAL
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on EQUALS
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on DIVIDE
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on MULTIPLY
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on MINUS
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on PLUS
-error:  state 14: reduce/reduce conflict between rule 37 and rule 4 on EOF
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on DO
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on TO
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on ELSE
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on THEN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on RSQBR
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on RPAREN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on SEMICOLON
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on COMMA
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on VAR
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on END
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on IN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on GRETHANEQUAL
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on GRETHAN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on LESSTHANEQUAL
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on LESSTHAN
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on NOTEQUAL
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on EQUALS
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on DIVIDE
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on MULTIPLY
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on MINUS
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on PLUS
+error:  state 14: reduce/reduce conflict between rule 38 and rule 4 on EOF
 
 state 14:
 
 	EXP : ID .  (reduce by rule 4)
 	EXP : ID . LPAREN EXPCOMM RPAREN 
-	LVALUE : ID .  (reduce by rule 37)
+	LVALUE : ID .  (reduce by rule 38)
 
 	EOF	reduce by rule 4
 	PLUS	reduce by rule 4
@@ -262,7 +278,7 @@ state 14:
 	MULTIPLY	reduce by rule 4
 	DIVIDE	reduce by rule 4
 	EQUALS	reduce by rule 4
-	ASSIGN	reduce by rule 37
+	ASSIGN	reduce by rule 38
 	NOTEQUAL	reduce by rule 4
 	LESSTHAN	reduce by rule 4
 	LESSTHANEQUAL	reduce by rule 4
@@ -270,15 +286,18 @@ state 14:
 	GRETHANEQUAL	reduce by rule 4
 	IN	reduce by rule 4
 	END	reduce by rule 4
+	VAR	reduce by rule 4
 	COMMA	reduce by rule 4
 	SEMICOLON	reduce by rule 4
-	LPAREN	shift 36
+	LPAREN	shift 37
 	RPAREN	reduce by rule 4
+	LSQBR	reduce by rule 38
+	RSQBR	reduce by rule 4
 	THEN	reduce by rule 4
 	ELSE	reduce by rule 4
 	TO	reduce by rule 4
 	DO	reduce by rule 4
-	DOT	reduce by rule 37
+	DOT	reduce by rule 38
 
 
 	.	error
@@ -295,15 +314,11 @@ state 15:
 
 state 16:
 
-	DECS : DEC SEMICOLON . DECS 
+	DECS : DEC DECS .  (reduce by rule 34)
 
-	VAR	shift 12
 
-	DEC	goto 3
-	DECS	goto 37
-	VARDECL	goto 1
 
-	.	reduce by rule 31
+	.	reduce by rule 34
 
 
 state 17:
@@ -318,7 +333,7 @@ state 17:
 
 state 18:
 
-	LVALUE : LVALUE LPAREN . EXP RPAREN 
+	LVALUE : LVALUE LSQBR . EXP RSQBR 
 
 	INT	shift 15
 	ID	shift 14
@@ -337,7 +352,7 @@ state 18:
 
 state 19:
 
-	EXP : LVALUE ASSIGN . EXP 
+	EXP : LVALUE LPAREN . EXP RPAREN 
 
 	INT	shift 15
 	ID	shift 14
@@ -356,7 +371,7 @@ state 19:
 
 state 20:
 
-	EXP : EXP GRETHANEQUAL . EXP 
+	EXP : LVALUE ASSIGN . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -375,7 +390,7 @@ state 20:
 
 state 21:
 
-	EXP : EXP GRETHAN . EXP 
+	EXP : EXP GRETHANEQUAL . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -394,7 +409,7 @@ state 21:
 
 state 22:
 
-	EXP : EXP LESSTHANEQUAL . EXP 
+	EXP : EXP GRETHAN . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -413,7 +428,7 @@ state 22:
 
 state 23:
 
-	EXP : EXP LESSTHAN . EXP 
+	EXP : EXP LESSTHANEQUAL . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -432,7 +447,7 @@ state 23:
 
 state 24:
 
-	EXP : EXP NOTEQUAL . EXP 
+	EXP : EXP LESSTHAN . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -451,7 +466,7 @@ state 24:
 
 state 25:
 
-	EXP : EXP EQUALS . EXP 
+	EXP : EXP NOTEQUAL . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -470,7 +485,7 @@ state 25:
 
 state 26:
 
-	EXP : EXP DIVIDE . EXP 
+	EXP : EXP EQUALS . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -489,7 +504,7 @@ state 26:
 
 state 27:
 
-	EXP : EXP MULTIPLY . EXP 
+	EXP : EXP DIVIDE . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -508,7 +523,7 @@ state 27:
 
 state 28:
 
-	EXP : EXP MINUS . EXP 
+	EXP : EXP MULTIPLY . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -527,7 +542,7 @@ state 28:
 
 state 29:
 
-	EXP : EXP PLUS . EXP 
+	EXP : EXP MINUS . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -546,39 +561,28 @@ state 29:
 
 state 30:
 
-	EXP : FOR ID . ASSIGN EXP TO EXP DO EXP 
+	EXP : EXP PLUS . EXP 
 
-	ASSIGN	shift 51
+	INT	shift 15
+	ID	shift 14
+	LET	shift 13
+	LPAREN	shift 11
+	IF	shift 10
+	WHILE	shift 9
+	FOR	shift 8
+	BREAK	shift 7
 
+	EXP	goto 51
+	LVALUE	goto 4
 
 	.	error
 
 
 state 31:
 
-	EXP : EXP . PLUS EXP 
-	EXP : EXP . MINUS EXP 
-	EXP : EXP . MULTIPLY EXP 
-	EXP : EXP . DIVIDE EXP 
-	EXP : EXP . EQUALS EXP 
-	EXP : EXP . NOTEQUAL EXP 
-	EXP : EXP . LESSTHAN EXP 
-	EXP : EXP . LESSTHANEQUAL EXP 
-	EXP : EXP . GRETHAN EXP 
-	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : WHILE EXP . DO EXP 
+	EXP : FOR ID . ASSIGN EXP TO EXP DO EXP 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	DO	shift 52
+	ASSIGN	shift 52
 
 
 	.	error
@@ -596,20 +600,19 @@ state 32:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : IF EXP . THEN EXP 
-	EXP : IF EXP . THEN EXP ELSE EXP 
+	EXP : WHILE EXP . DO EXP 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	THEN	shift 53
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	DO	shift 53
 
 
 	.	error
@@ -627,19 +630,20 @@ state 33:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : LPAREN EXP . RPAREN 
+	EXP : IF EXP . THEN EXP 
+	EXP : IF EXP . THEN EXP ELSE EXP 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	RPAREN	shift 54
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	THEN	shift 54
 
 
 	.	error
@@ -647,9 +651,29 @@ state 33:
 
 state 34:
 
-	VARDECL : VAR ID . ASSIGN EXP 
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : EXP . NOTEQUAL EXP 
+	EXP : EXP . LESSTHAN EXP 
+	EXP : EXP . LESSTHANEQUAL EXP 
+	EXP : EXP . GRETHAN EXP 
+	EXP : EXP . GRETHANEQUAL EXP 
+	EXP : LPAREN EXP . RPAREN 
 
-	ASSIGN	shift 55
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	RPAREN	shift 55
 
 
 	.	error
@@ -657,15 +681,25 @@ state 34:
 
 state 35:
 
-	EXP : LET DECS . IN EXPS END 
+	VARDECL : VAR ID . ASSIGN EXP 
 
-	IN	shift 56
+	ASSIGN	shift 56
 
 
 	.	error
 
 
 state 36:
+
+	EXP : LET DECS . IN EXPS END 
+
+	IN	shift 57
+
+
+	.	error
+
+
+state 37:
 
 	EXP : ID LPAREN . EXPCOMM RPAREN 
 
@@ -678,29 +712,20 @@ state 36:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 58
+	EXP	goto 59
 	LVALUE	goto 4
-	EXPCOMM	goto 57
+	EXPCOMM	goto 58
 
-	.	reduce by rule 25
-
-
-state 37:
-
-	DECS : DEC SEMICOLON DECS .  (reduce by rule 33)
-
-
-
-	.	reduce by rule 33
+	.	reduce by rule 26
 
 
 state 38:
 
-	LVALUE : LVALUE DOT ID .  (reduce by rule 38)
+	LVALUE : LVALUE DOT ID .  (reduce by rule 39)
 
 
 
-	.	reduce by rule 38
+	.	reduce by rule 39
 
 
 state 39:
@@ -715,19 +740,19 @@ state 39:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	LVALUE : LVALUE LPAREN EXP . RPAREN 
+	LVALUE : LVALUE LSQBR EXP . RSQBR 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	RPAREN	shift 59
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	RSQBR	shift 60
 
 
 	.	error
@@ -745,11 +770,22 @@ state 40:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : LVALUE ASSIGN EXP .  (reduce by rule 17)
+	EXP : LVALUE LPAREN EXP . RPAREN 
+
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	RPAREN	shift 61
 
 
-
-	.	reduce by rule 17
+	.	error
 
 
 state 41:
@@ -764,25 +800,15 @@ state 41:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : EXP GRETHANEQUAL EXP .  (reduce by rule 14)
+	EXP : LVALUE ASSIGN EXP .  (reduce by rule 17)
 
-	EOF	reduce by rule 14
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	IN	reduce by rule 14
-	END	reduce by rule 14
-	COMMA	reduce by rule 14
-	SEMICOLON	reduce by rule 14
-	RPAREN	reduce by rule 14
-	THEN	reduce by rule 14
-	ELSE	reduce by rule 14
-	TO	reduce by rule 14
-	DO	reduce by rule 14
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
 
 
-	.	error
+	.	reduce by rule 17
 
 
 state 42:
@@ -796,23 +822,25 @@ state 42:
 	EXP : EXP . LESSTHAN EXP 
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
-	EXP : EXP GRETHAN EXP .  (reduce by rule 13)
 	EXP : EXP . GRETHANEQUAL EXP 
+	EXP : EXP GRETHANEQUAL EXP .  (reduce by rule 15)
 
-	EOF	reduce by rule 13
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	IN	reduce by rule 13
-	END	reduce by rule 13
-	COMMA	reduce by rule 13
-	SEMICOLON	reduce by rule 13
-	RPAREN	reduce by rule 13
-	THEN	reduce by rule 13
-	ELSE	reduce by rule 13
-	TO	reduce by rule 13
-	DO	reduce by rule 13
+	EOF	reduce by rule 15
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	IN	reduce by rule 15
+	END	reduce by rule 15
+	VAR	reduce by rule 15
+	COMMA	reduce by rule 15
+	SEMICOLON	reduce by rule 15
+	RPAREN	reduce by rule 15
+	RSQBR	reduce by rule 15
+	THEN	reduce by rule 15
+	ELSE	reduce by rule 15
+	TO	reduce by rule 15
+	DO	reduce by rule 15
 
 
 	.	error
@@ -828,24 +856,26 @@ state 43:
 	EXP : EXP . NOTEQUAL EXP 
 	EXP : EXP . LESSTHAN EXP 
 	EXP : EXP . LESSTHANEQUAL EXP 
-	EXP : EXP LESSTHANEQUAL EXP .  (reduce by rule 12)
 	EXP : EXP . GRETHAN EXP 
+	EXP : EXP GRETHAN EXP .  (reduce by rule 14)
 	EXP : EXP . GRETHANEQUAL EXP 
 
-	EOF	reduce by rule 12
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	IN	reduce by rule 12
-	END	reduce by rule 12
-	COMMA	reduce by rule 12
-	SEMICOLON	reduce by rule 12
-	RPAREN	reduce by rule 12
-	THEN	reduce by rule 12
-	ELSE	reduce by rule 12
-	TO	reduce by rule 12
-	DO	reduce by rule 12
+	EOF	reduce by rule 14
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	IN	reduce by rule 14
+	END	reduce by rule 14
+	VAR	reduce by rule 14
+	COMMA	reduce by rule 14
+	SEMICOLON	reduce by rule 14
+	RPAREN	reduce by rule 14
+	RSQBR	reduce by rule 14
+	THEN	reduce by rule 14
+	ELSE	reduce by rule 14
+	TO	reduce by rule 14
+	DO	reduce by rule 14
 
 
 	.	error
@@ -860,25 +890,27 @@ state 44:
 	EXP : EXP . EQUALS EXP 
 	EXP : EXP . NOTEQUAL EXP 
 	EXP : EXP . LESSTHAN EXP 
-	EXP : EXP LESSTHAN EXP .  (reduce by rule 11)
 	EXP : EXP . LESSTHANEQUAL EXP 
+	EXP : EXP LESSTHANEQUAL EXP .  (reduce by rule 13)
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
 
-	EOF	reduce by rule 11
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	IN	reduce by rule 11
-	END	reduce by rule 11
-	COMMA	reduce by rule 11
-	SEMICOLON	reduce by rule 11
-	RPAREN	reduce by rule 11
-	THEN	reduce by rule 11
-	ELSE	reduce by rule 11
-	TO	reduce by rule 11
-	DO	reduce by rule 11
+	EOF	reduce by rule 13
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	IN	reduce by rule 13
+	END	reduce by rule 13
+	VAR	reduce by rule 13
+	COMMA	reduce by rule 13
+	SEMICOLON	reduce by rule 13
+	RPAREN	reduce by rule 13
+	RSQBR	reduce by rule 13
+	THEN	reduce by rule 13
+	ELSE	reduce by rule 13
+	TO	reduce by rule 13
+	DO	reduce by rule 13
 
 
 	.	error
@@ -892,26 +924,28 @@ state 45:
 	EXP : EXP . DIVIDE EXP 
 	EXP : EXP . EQUALS EXP 
 	EXP : EXP . NOTEQUAL EXP 
-	EXP : EXP NOTEQUAL EXP .  (reduce by rule 10)
 	EXP : EXP . LESSTHAN EXP 
+	EXP : EXP LESSTHAN EXP .  (reduce by rule 12)
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
 
-	EOF	reduce by rule 10
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	IN	reduce by rule 10
-	END	reduce by rule 10
-	COMMA	reduce by rule 10
-	SEMICOLON	reduce by rule 10
-	RPAREN	reduce by rule 10
-	THEN	reduce by rule 10
-	ELSE	reduce by rule 10
-	TO	reduce by rule 10
-	DO	reduce by rule 10
+	EOF	reduce by rule 12
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	IN	reduce by rule 12
+	END	reduce by rule 12
+	VAR	reduce by rule 12
+	COMMA	reduce by rule 12
+	SEMICOLON	reduce by rule 12
+	RPAREN	reduce by rule 12
+	RSQBR	reduce by rule 12
+	THEN	reduce by rule 12
+	ELSE	reduce by rule 12
+	TO	reduce by rule 12
+	DO	reduce by rule 12
 
 
 	.	error
@@ -924,27 +958,29 @@ state 46:
 	EXP : EXP . MULTIPLY EXP 
 	EXP : EXP . DIVIDE EXP 
 	EXP : EXP . EQUALS EXP 
-	EXP : EXP EQUALS EXP .  (reduce by rule 9)
 	EXP : EXP . NOTEQUAL EXP 
+	EXP : EXP NOTEQUAL EXP .  (reduce by rule 11)
 	EXP : EXP . LESSTHAN EXP 
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
 
-	EOF	reduce by rule 9
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	IN	reduce by rule 9
-	END	reduce by rule 9
-	COMMA	reduce by rule 9
-	SEMICOLON	reduce by rule 9
-	RPAREN	reduce by rule 9
-	THEN	reduce by rule 9
-	ELSE	reduce by rule 9
-	TO	reduce by rule 9
-	DO	reduce by rule 9
+	EOF	reduce by rule 11
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	IN	reduce by rule 11
+	END	reduce by rule 11
+	VAR	reduce by rule 11
+	COMMA	reduce by rule 11
+	SEMICOLON	reduce by rule 11
+	RPAREN	reduce by rule 11
+	RSQBR	reduce by rule 11
+	THEN	reduce by rule 11
+	ELSE	reduce by rule 11
+	TO	reduce by rule 11
+	DO	reduce by rule 11
 
 
 	.	error
@@ -956,7 +992,61 @@ state 47:
 	EXP : EXP . MINUS EXP 
 	EXP : EXP . MULTIPLY EXP 
 	EXP : EXP . DIVIDE EXP 
-	EXP : EXP DIVIDE EXP .  (reduce by rule 8)
+	EXP : EXP . EQUALS EXP 
+	EXP : EXP EQUALS EXP .  (reduce by rule 10)
+	EXP : EXP . NOTEQUAL EXP 
+	EXP : EXP . LESSTHAN EXP 
+	EXP : EXP . LESSTHANEQUAL EXP 
+	EXP : EXP . GRETHAN EXP 
+	EXP : EXP . GRETHANEQUAL EXP 
+
+	EOF	reduce by rule 10
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	IN	reduce by rule 10
+	END	reduce by rule 10
+	VAR	reduce by rule 10
+	COMMA	reduce by rule 10
+	SEMICOLON	reduce by rule 10
+	RPAREN	reduce by rule 10
+	RSQBR	reduce by rule 10
+	THEN	reduce by rule 10
+	ELSE	reduce by rule 10
+	TO	reduce by rule 10
+	DO	reduce by rule 10
+
+
+	.	error
+
+
+state 48:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP DIVIDE EXP .  (reduce by rule 9)
+	EXP : EXP . EQUALS EXP 
+	EXP : EXP . NOTEQUAL EXP 
+	EXP : EXP . LESSTHAN EXP 
+	EXP : EXP . LESSTHANEQUAL EXP 
+	EXP : EXP . GRETHAN EXP 
+	EXP : EXP . GRETHANEQUAL EXP 
+
+
+
+	.	reduce by rule 9
+
+
+state 49:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP MULTIPLY EXP .  (reduce by rule 8)
+	EXP : EXP . DIVIDE EXP 
 	EXP : EXP . EQUALS EXP 
 	EXP : EXP . NOTEQUAL EXP 
 	EXP : EXP . LESSTHAN EXP 
@@ -969,12 +1059,12 @@ state 47:
 	.	reduce by rule 8
 
 
-state 48:
+state 50:
 
 	EXP : EXP . PLUS EXP 
 	EXP : EXP . MINUS EXP 
+	EXP : EXP MINUS EXP .  (reduce by rule 7)
 	EXP : EXP . MULTIPLY EXP 
-	EXP : EXP MULTIPLY EXP .  (reduce by rule 7)
 	EXP : EXP . DIVIDE EXP 
 	EXP : EXP . EQUALS EXP 
 	EXP : EXP . NOTEQUAL EXP 
@@ -983,16 +1073,18 @@ state 48:
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
 
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
 
 
 	.	reduce by rule 7
 
 
-state 49:
+state 51:
 
 	EXP : EXP . PLUS EXP 
+	EXP : EXP PLUS EXP .  (reduce by rule 6)
 	EXP : EXP . MINUS EXP 
-	EXP : EXP MINUS EXP .  (reduce by rule 6)
 	EXP : EXP . MULTIPLY EXP 
 	EXP : EXP . DIVIDE EXP 
 	EXP : EXP . EQUALS EXP 
@@ -1002,76 +1094,16 @@ state 49:
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
 
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
 
 
 	.	reduce by rule 6
 
 
-state 50:
-
-	EXP : EXP . PLUS EXP 
-	EXP : EXP PLUS EXP .  (reduce by rule 5)
-	EXP : EXP . MINUS EXP 
-	EXP : EXP . MULTIPLY EXP 
-	EXP : EXP . DIVIDE EXP 
-	EXP : EXP . EQUALS EXP 
-	EXP : EXP . NOTEQUAL EXP 
-	EXP : EXP . LESSTHAN EXP 
-	EXP : EXP . LESSTHANEQUAL EXP 
-	EXP : EXP . GRETHAN EXP 
-	EXP : EXP . GRETHANEQUAL EXP 
-
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-
-
-	.	reduce by rule 5
-
-
-state 51:
-
-	EXP : FOR ID ASSIGN . EXP TO EXP DO EXP 
-
-	INT	shift 15
-	ID	shift 14
-	LET	shift 13
-	LPAREN	shift 11
-	IF	shift 10
-	WHILE	shift 9
-	FOR	shift 8
-	BREAK	shift 7
-
-	EXP	goto 60
-	LVALUE	goto 4
-
-	.	error
-
-
 state 52:
 
-	EXP : WHILE EXP DO . EXP 
-
-	INT	shift 15
-	ID	shift 14
-	LET	shift 13
-	LPAREN	shift 11
-	IF	shift 10
-	WHILE	shift 9
-	FOR	shift 8
-	BREAK	shift 7
-
-	EXP	goto 61
-	LVALUE	goto 4
-
-	.	error
-
-
-state 53:
-
-	EXP : IF EXP THEN . EXP 
-	EXP : IF EXP THEN . EXP ELSE EXP 
+	EXP : FOR ID ASSIGN . EXP TO EXP DO EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -1088,18 +1120,9 @@ state 53:
 	.	error
 
 
-state 54:
+state 53:
 
-	EXP : LPAREN EXP RPAREN .  (reduce by rule 15)
-
-
-
-	.	reduce by rule 15
-
-
-state 55:
-
-	VARDECL : VAR ID ASSIGN . EXP 
+	EXP : WHILE EXP DO . EXP 
 
 	INT	shift 15
 	ID	shift 14
@@ -1116,7 +1139,55 @@ state 55:
 	.	error
 
 
+state 54:
+
+	EXP : IF EXP THEN . EXP 
+	EXP : IF EXP THEN . EXP ELSE EXP 
+
+	INT	shift 15
+	ID	shift 14
+	LET	shift 13
+	LPAREN	shift 11
+	IF	shift 10
+	WHILE	shift 9
+	FOR	shift 8
+	BREAK	shift 7
+
+	EXP	goto 64
+	LVALUE	goto 4
+
+	.	error
+
+
+state 55:
+
+	EXP : LPAREN EXP RPAREN .  (reduce by rule 16)
+
+
+
+	.	reduce by rule 16
+
+
 state 56:
+
+	VARDECL : VAR ID ASSIGN . EXP 
+
+	INT	shift 15
+	ID	shift 14
+	LET	shift 13
+	LPAREN	shift 11
+	IF	shift 10
+	WHILE	shift 9
+	FOR	shift 8
+	BREAK	shift 7
+
+	EXP	goto 65
+	LVALUE	goto 4
+
+	.	error
+
+
+state 57:
 
 	EXP : LET DECS IN . EXPS END 
 
@@ -1129,94 +1200,24 @@ state 56:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 65
-	EXPS	goto 64
+	EXP	goto 67
+	EXPS	goto 66
 	LVALUE	goto 4
 
-	.	reduce by rule 28
-
-
-state 57:
-
-	EXP : ID LPAREN EXPCOMM . RPAREN 
-
-	RPAREN	shift 66
-
-
-	.	error
+	.	reduce by rule 29
 
 
 state 58:
 
-	EXP : EXP . PLUS EXP 
-	EXP : EXP . MINUS EXP 
-	EXP : EXP . MULTIPLY EXP 
-	EXP : EXP . DIVIDE EXP 
-	EXP : EXP . EQUALS EXP 
-	EXP : EXP . NOTEQUAL EXP 
-	EXP : EXP . LESSTHAN EXP 
-	EXP : EXP . LESSTHANEQUAL EXP 
-	EXP : EXP . GRETHAN EXP 
-	EXP : EXP . GRETHANEQUAL EXP 
-	EXPCOMM : EXP .  (reduce by rule 26)
-	EXPCOMM : EXP . COMMA EXPCOMM 
+	EXP : ID LPAREN EXPCOMM . RPAREN 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	COMMA	shift 67
-
-
-	.	reduce by rule 26
-
-
-state 59:
-
-	LVALUE : LVALUE LPAREN EXP RPAREN .  (reduce by rule 39)
-
-
-
-	.	reduce by rule 39
-
-
-state 60:
-
-	EXP : EXP . PLUS EXP 
-	EXP : EXP . MINUS EXP 
-	EXP : EXP . MULTIPLY EXP 
-	EXP : EXP . DIVIDE EXP 
-	EXP : EXP . EQUALS EXP 
-	EXP : EXP . NOTEQUAL EXP 
-	EXP : EXP . LESSTHAN EXP 
-	EXP : EXP . LESSTHANEQUAL EXP 
-	EXP : EXP . GRETHAN EXP 
-	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : FOR ID ASSIGN EXP . TO EXP DO EXP 
-
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	TO	shift 68
+	RPAREN	shift 68
 
 
 	.	error
 
 
-state 61:
+state 59:
 
 	EXP : EXP . PLUS EXP 
 	EXP : EXP . MINUS EXP 
@@ -1228,21 +1229,41 @@ state 61:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : WHILE EXP DO EXP .  (reduce by rule 23)
+	EXPCOMM : EXP .  (reduce by rule 27)
+	EXPCOMM : EXP . COMMA EXPCOMM 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	COMMA	shift 69
 
 
-	.	reduce by rule 23
+	.	reduce by rule 27
+
+
+state 60:
+
+	LVALUE : LVALUE LSQBR EXP RSQBR .  (reduce by rule 40)
+
+
+
+	.	reduce by rule 40
+
+
+state 61:
+
+	EXP : LVALUE LPAREN EXP RPAREN .  (reduce by rule 18)
+
+
+
+	.	reduce by rule 18
 
 
 state 62:
@@ -1257,23 +1278,22 @@ state 62:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : IF EXP THEN EXP .  (reduce by rule 20)
-	EXP : IF EXP THEN EXP . ELSE EXP 
+	EXP : FOR ID ASSIGN EXP . TO EXP DO EXP 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	ELSE	shift 69
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	TO	shift 70
 
 
-	.	reduce by rule 20
+	.	error
 
 
 state 63:
@@ -1288,31 +1308,52 @@ state 63:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	VARDECL : VAR ID ASSIGN EXP .  (reduce by rule 36)
+	EXP : WHILE EXP DO EXP .  (reduce by rule 24)
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
 
 
-	.	reduce by rule 36
+	.	reduce by rule 24
 
 
 state 64:
 
-	EXP : LET DECS IN EXPS . END 
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : EXP . NOTEQUAL EXP 
+	EXP : EXP . LESSTHAN EXP 
+	EXP : EXP . LESSTHANEQUAL EXP 
+	EXP : EXP . GRETHAN EXP 
+	EXP : EXP . GRETHANEQUAL EXP 
+	EXP : IF EXP THEN EXP .  (reduce by rule 21)
+	EXP : IF EXP THEN EXP . ELSE EXP 
 
-	END	shift 70
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	ELSE	shift 71
 
 
-	.	error
+	.	reduce by rule 21
 
 
 state 65:
@@ -1327,35 +1368,74 @@ state 65:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXPS : EXP .  (reduce by rule 29)
-	EXPS : EXP . SEMICOLON EXPS 
+	VARDECL : VAR ID ASSIGN EXP .  (reduce by rule 37)
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	SEMICOLON	shift 71
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
 
 
-	.	reduce by rule 29
+	.	reduce by rule 37
 
 
 state 66:
 
-	EXP : ID LPAREN EXPCOMM RPAREN .  (reduce by rule 19)
+	EXP : LET DECS IN EXPS . END 
+
+	END	shift 72
 
 
-
-	.	reduce by rule 19
+	.	error
 
 
 state 67:
+
+	EXP : EXP . PLUS EXP 
+	EXP : EXP . MINUS EXP 
+	EXP : EXP . MULTIPLY EXP 
+	EXP : EXP . DIVIDE EXP 
+	EXP : EXP . EQUALS EXP 
+	EXP : EXP . NOTEQUAL EXP 
+	EXP : EXP . LESSTHAN EXP 
+	EXP : EXP . LESSTHANEQUAL EXP 
+	EXP : EXP . GRETHAN EXP 
+	EXP : EXP . GRETHANEQUAL EXP 
+	EXPS : EXP .  (reduce by rule 30)
+	EXPS : EXP . SEMICOLON EXPS 
+
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	SEMICOLON	shift 73
+
+
+	.	reduce by rule 30
+
+
+state 68:
+
+	EXP : ID LPAREN EXPCOMM RPAREN .  (reduce by rule 20)
+
+
+
+	.	reduce by rule 20
+
+
+state 69:
 
 	EXPCOMM : EXP COMMA . EXPCOMM 
 
@@ -1368,14 +1448,14 @@ state 67:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 58
+	EXP	goto 59
 	LVALUE	goto 4
-	EXPCOMM	goto 72
+	EXPCOMM	goto 74
 
-	.	reduce by rule 25
+	.	reduce by rule 26
 
 
-state 68:
+state 70:
 
 	EXP : FOR ID ASSIGN EXP TO . EXP DO EXP 
 
@@ -1388,13 +1468,13 @@ state 68:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 73
+	EXP	goto 75
 	LVALUE	goto 4
 
 	.	error
 
 
-state 69:
+state 71:
 
 	EXP : IF EXP THEN EXP ELSE . EXP 
 
@@ -1407,22 +1487,22 @@ state 69:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 74
+	EXP	goto 76
 	LVALUE	goto 4
 
 	.	error
 
 
-state 70:
+state 72:
 
-	EXP : LET DECS IN EXPS END .  (reduce by rule 18)
-
-
-
-	.	reduce by rule 18
+	EXP : LET DECS IN EXPS END .  (reduce by rule 19)
 
 
-state 71:
+
+	.	reduce by rule 19
+
+
+state 73:
 
 	EXPS : EXP SEMICOLON . EXPS 
 
@@ -1435,23 +1515,23 @@ state 71:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 65
-	EXPS	goto 75
+	EXP	goto 67
+	EXPS	goto 77
 	LVALUE	goto 4
+
+	.	reduce by rule 29
+
+
+state 74:
+
+	EXPCOMM : EXP COMMA EXPCOMM .  (reduce by rule 28)
+
+
 
 	.	reduce by rule 28
 
 
-state 72:
-
-	EXPCOMM : EXP COMMA EXPCOMM .  (reduce by rule 27)
-
-
-
-	.	reduce by rule 27
-
-
-state 73:
+state 75:
 
 	EXP : EXP . PLUS EXP 
 	EXP : EXP . MINUS EXP 
@@ -1465,23 +1545,23 @@ state 73:
 	EXP : EXP . GRETHANEQUAL EXP 
 	EXP : FOR ID ASSIGN EXP TO EXP . DO EXP 
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-	DO	shift 76
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
+	DO	shift 78
 
 
 	.	error
 
 
-state 74:
+state 76:
 
 	EXP : EXP . PLUS EXP 
 	EXP : EXP . MINUS EXP 
@@ -1493,33 +1573,33 @@ state 74:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : IF EXP THEN EXP ELSE EXP .  (reduce by rule 21)
+	EXP : IF EXP THEN EXP ELSE EXP .  (reduce by rule 22)
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-
-
-	.	reduce by rule 21
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
 
 
-state 75:
-
-	EXPS : EXP SEMICOLON EXPS .  (reduce by rule 30)
+	.	reduce by rule 22
 
 
+state 77:
 
-	.	reduce by rule 30
+	EXPS : EXP SEMICOLON EXPS .  (reduce by rule 31)
 
 
-state 76:
+
+	.	reduce by rule 31
+
+
+state 78:
 
 	EXP : FOR ID ASSIGN EXP TO EXP DO . EXP 
 
@@ -1532,13 +1612,13 @@ state 76:
 	FOR	shift 8
 	BREAK	shift 7
 
-	EXP	goto 77
+	EXP	goto 79
 	LVALUE	goto 4
 
 	.	error
 
 
-state 77:
+state 79:
 
 	EXP : EXP . PLUS EXP 
 	EXP : EXP . MINUS EXP 
@@ -1550,24 +1630,24 @@ state 77:
 	EXP : EXP . LESSTHANEQUAL EXP 
 	EXP : EXP . GRETHAN EXP 
 	EXP : EXP . GRETHANEQUAL EXP 
-	EXP : FOR ID ASSIGN EXP TO EXP DO EXP .  (reduce by rule 22)
+	EXP : FOR ID ASSIGN EXP TO EXP DO EXP .  (reduce by rule 23)
 
-	PLUS	shift 29
-	MINUS	shift 28
-	MULTIPLY	shift 27
-	DIVIDE	shift 26
-	EQUALS	shift 25
-	NOTEQUAL	shift 24
-	LESSTHAN	shift 23
-	LESSTHANEQUAL	shift 22
-	GRETHAN	shift 21
-	GRETHANEQUAL	shift 20
-
-
-	.	reduce by rule 22
+	PLUS	shift 30
+	MINUS	shift 29
+	MULTIPLY	shift 28
+	DIVIDE	shift 27
+	EQUALS	shift 26
+	NOTEQUAL	shift 25
+	LESSTHAN	shift 24
+	LESSTHANEQUAL	shift 23
+	GRETHAN	shift 22
+	GRETHANEQUAL	shift 21
 
 
-state 78:
+	.	reduce by rule 23
+
+
+state 80:
 
 
 	EOF	accept
@@ -1575,5 +1655,5 @@ state 78:
 
 	.	error
 
-307 of 571 action table entries left after compaction
-69 goto table entries
+340 of 613 action table entries left after compaction
+71 goto table entries

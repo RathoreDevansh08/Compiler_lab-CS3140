@@ -18,9 +18,11 @@ datatype Prog = PE of Expr
 and
 		 Expr  = INT of int
 			   | ID of string
+			   | ARR of Ty * Expr * Expr
 			   | LVE of Lvalue
                | BINOP of Expr * BinOp * Expr
                | FUNC of (ID * Expr list)
+               | FUNCALL of (Lvalue * Expr)
                | IF of (Expr * Expr)
                | IFELSE of (Expr * Expr * Expr)
                | LET of (decl list * Expr list)

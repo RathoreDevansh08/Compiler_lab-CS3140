@@ -22,13 +22,22 @@ and
 
     print_expr (Ast.INT x) = print (Int.toString (x))
 |   print_expr (Ast.ID x) = print (x)
+|   print_expr (Ast.ARR (x,y,z)) = ( print_ty (x) ; 
+								     print (" [");
+								     print_expr y ;
+								     print "] of " ;
+								     print_expr z )
 |	print_expr (Ast.LVE (x)) = print_lval x 
-|   print_expr (Ast.BINOP (x , bop , y)) = ( print_expr x ;
+|   print_expr (Ast.BINOP (x , bop , y)) = ( print_expr (x) ;
         								     print (" " ^ (Ast.binOpToString bop) ^ " ") ;
         								     print_expr y )
 | 	print_expr (Ast.FUNC(a, b)) = ( print (a ^ " (");
 							  	    print_expcomm (b);
 								    print (")") )
+|	print_expr (Ast.FUNCALL (lv, e)) = ( print_lval lv ;
+										 print " (" ;
+										 print_expr e ;
+										 print " ) \n" )
 | 	print_expr (Ast.LET (x, y)) = ( indent := !indent + 1;	
 								    print ("let" ^ new_line(!indent));
 								    print_decs (x);
@@ -89,7 +98,7 @@ and
 						  print (new_line(!indent))
 						  )
 |	print_expr (Ast.BREAK) = (print("break"))
-|	print_expr (Ast.ASSIGN(a,b)) = ( print_lval a ;
+|	print_expr (Ast.ASSIGN(a,b)) = ( print_lval (a) ;
        							     print (" := ") ;
     								 print_expr (b) )						  
 
