@@ -27,7 +27,9 @@ and
 								     print_expr y ;
 								     print "] of " ;
 								     print_expr z )
-|	print_expr (Ast.LVE (x)) = print_lval x 
+|	print_expr (Ast.LVE (x)) = print_lval x
+|	print_expr (Ast.NEW (x)) = (print "new ";
+								print_ty x )
 |   print_expr (Ast.BINOP (x , bop , y)) = ( print_expr (x) ;
         								     print (" " ^ (Ast.binOpToString bop) ^ " ") ;
         								     print_expr y )
@@ -38,6 +40,11 @@ and
 										 print " (" ;
 										 print_expr e ;
 										 print " ) \n" )
+|	print_expr (Ast.BREX (x)) = (print "( \n" ;
+								 print_exps x ;
+								 print "\n)" )
+|	print_expr (Ast.NEXP (x)) = (print "- ";
+								 print_expr x)
 | 	print_expr (Ast.LET (x, y)) = ( indent := !indent + 1;	
 								    print ("let" ^ new_line(!indent));
 								    print_decs (x);
@@ -129,7 +136,13 @@ and
 
 	print_dec (Ast.VARDECL(x, y)) = ( print ("var " ^ x ^ " := ");
 		 							  print_expr(y) )
-
+|	print_dec (Ast.TYPEDEC(x, y)) = (print ("type ");
+									 print x;
+									 print " = ";
+									 print_ty y
+									 )
+|	print_dec (Ast.IMPDEC (x)) = (print "import ";
+								  print x )
 and
 
 	print_lval (Ast.LVAL_IDEN x) = print(x)

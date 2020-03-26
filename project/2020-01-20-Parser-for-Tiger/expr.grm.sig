@@ -2,6 +2,7 @@ signature Tiger_TOKENS =
 sig
 type ('a,'b) token
 type svalue
+val IMPORT:  'a * 'a -> (svalue,'a) token
 val BACKSLASH:  'a * 'a -> (svalue,'a) token
 val DOUBQUOTES:  'a * 'a -> (svalue,'a) token
 val DOT:  'a * 'a -> (svalue,'a) token
@@ -12,6 +13,7 @@ val OF:  'a * 'a -> (svalue,'a) token
 val DO:  'a * 'a -> (svalue,'a) token
 val ARRAY:  'a * 'a -> (svalue,'a) token
 val TYPE:  'a * 'a -> (svalue,'a) token
+val NEW:  'a * 'a -> (svalue,'a) token
 val BREAK:  'a * 'a -> (svalue,'a) token
 val TO:  'a * 'a -> (svalue,'a) token
 val FOR:  'a * 'a -> (svalue,'a) token

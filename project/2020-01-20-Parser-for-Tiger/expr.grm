@@ -3,7 +3,7 @@
 %verbose
 %pure
 
-%term EOF
+%term  EOF
 	| INT of int | ID of string
 	| PLUS | MINUS | MULTIPLY | DIVIDE
 	| AND | OR
@@ -13,11 +13,11 @@
 	| COLON | COMMA | SEMICOLON
 	| LPAREN | RPAREN | LSQBR | RSQBR | LCUBR | RCUBR
 	| IF | THEN | ELSE 
-	| WHILE | FOR | TO | BREAK
+	| WHILE | FOR | TO | BREAK | NEW
 	| TYPE | ARRAY | DO | OF
 	| NIL | INTK | STRINGK | DOT
 	| DOUBQUOTES | BACKSLASH
-
+	| IMPORT
 
 %nonterm S			of Ast.Prog
 	   | PROGRAM  	of Ast.Prog
@@ -61,6 +61,7 @@ PROGRAM	:	EXP	 ( Ast.PE(EXP) )
 EXP     :   INT                      ( Ast.INT(INT) )
 		| 	ID 						 ( Ast.ID(ID) )
 		| 	LVALUE					 ( Ast.LVE(LVALUE) )
+		|	NEW TY					 ( Ast.NEW(TY))
         |   EXP PLUS EXP             ( Ast.BINOP(EXP1, Ast.Plus, EXP2) )
 		|	EXP MINUS EXP			 ( Ast.BINOP(EXP1, Ast.Minus, EXP2) )
 		|	EXP MULTIPLY EXP		 ( Ast.BINOP(EXP1, Ast.Mul, EXP2) )
@@ -71,7 +72,8 @@ EXP     :   INT                      ( Ast.INT(INT) )
 		|	EXP LESSTHANEQUAL EXP	 ( Ast.BINOP(EXP1, Ast.LessThanEqual, EXP2) )
 		|	EXP GRETHAN EXP			 ( Ast.BINOP(EXP1, Ast.GreThan, EXP2) )
 		|	EXP GRETHANEQUAL EXP	 ( Ast.BINOP(EXP1, Ast.GreThanEqual, EXP2) )
-		|	LPAREN EXP RPAREN        ( EXP ) 
+		|	LPAREN EXPS RPAREN       ( Ast.BREX(EXPS) ) 
+		|	MINUS EXP				 ( Ast.NEXP(EXP))
 		|   LVALUE ASSIGN EXP        ( Ast.ASSIGN(LVALUE, EXP) )
 		|	LVALUE LPAREN EXP RPAREN ( Ast.FUNCALL(LVALUE, EXP) )
 		| 	LET DECS IN EXPS END	 ( Ast.LET(DECS, EXPS) )
@@ -100,6 +102,8 @@ DECS 	:  	(* empty *) 			 ( [] )
 		
 		
 DEC  	: 	VARDECL					 ( VARDECL )
+		|	TYPE ID EQUALS TY	(Ast.TYPEDEC(ID, TY))
+		|	IMPORT ID				(Ast.IMPDEC(ID))
 
 TY		:	ID						(Ast.TYPEID(ID))
 		

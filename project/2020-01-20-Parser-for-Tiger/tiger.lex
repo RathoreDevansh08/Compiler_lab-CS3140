@@ -49,7 +49,7 @@ esc = [\a \b \f \r \t \v];
 
 <INITIAL> {digit}+      => ( Tokens.INT(IntFromString yytext, yypos, yypos + size yytext) );
 
-
+<INITIAL> "new"		  => ( Tokens.NEW(yypos, yypos + 3) );
 <INITIAL> "let"       => ( Tokens.LET(yypos, yypos + 3) );
 <INITIAL> "in"        => ( Tokens.IN(yypos, yypos + 2)) ;
 <INITIAL> "end"       => ( Tokens.END(yypos, yypos + 3) );
