@@ -1,4 +1,4 @@
-structure TREE = struct
+structure Translate = struct
 
 datatype exp = Ex of Tree.exp
 			 | Nx of Tree.stm

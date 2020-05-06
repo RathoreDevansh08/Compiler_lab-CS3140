@@ -1,6 +1,6 @@
 (* The file tree.sml (See page 150 of the Modern Comp. Imp.  *)
 
-structure TREE = struct
+structure Tree = struct
 
 datatype exp = CONST of LargeInt.int
          | NAME of Temp.label
